@@ -1,6 +1,4 @@
 //Jerry Thomas
-//ID: 111360747
-//Lab Section 12
 
 import java.util.*;
 public class ConnectFour {
