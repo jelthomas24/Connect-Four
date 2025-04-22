@@ -1,37 +1,35 @@
 //Jerry Thomas
-
 import java.util.*;
+
 public class ConnectFour {
 	public static void main(String [] args) {
-	String[][] board = new String[6][7];
-	ConnectFour c = new ConnectFour();
-	boolean winner = false;
-	boolean tie = false;
-	c.printBoard(board);
-	while(!winner) {
-		if(!winner){
-			c.dropRed(board,c);
+		String[][] board = new String[6][7];
+		ConnectFour c = new ConnectFour();
+		c.printBoard(board);
+		while(true) {
+			c.dropRed(board);
 			c.printBoard(board);
-			winner = c.checkRed(board,c);
-			if(winner == true) {
+			boolean winner = c.checkRed(board);
+			if(winner) {
 				System.out.println("Red Wins!");
 				break;
-			}else {
-				tie = c.checkTie(board, c);
-				if(tie == true) {
+			}
+			else {
+				boolean tie = c.checkTie(board);
+				if(tie) {
 					System.out.println("Nobody won!");
 					break;
 				}
-				c.dropYellow(board,c);
+				c.dropYellow(board);
 				c.printBoard(board);
-				winner = c.checkYellow(board,c);
-				if(winner == true) {
+				winner = c.checkYellow(board);
+				if(winner) {
 					System.out.println("Yellow Wins!");
 					break;
 				}
 				else {
-					tie = c.checkTie(board, c);
-					if(tie == true) {
+					tie = c.checkTie(board);
+					if(tie) {
 						System.out.println("Nobody won!");
 						break;
 					}
@@ -39,7 +37,7 @@ public class ConnectFour {
 			}
 		}
 	}
-	}
+
 	public void printBoard(String[][] board) {
 		for(int i=0;i<6;i++){
             for(int j=0;j<7;j++){
@@ -60,7 +58,7 @@ public class ConnectFour {
         }
         System.out.println(".............................");
 	}
-	public void dropRed(String[][] board, ConnectFour c) {
+	public void dropRed(String[][] board) {
 		Scanner input = new Scanner(System.in);
 		while(true) {
 			try {
@@ -92,7 +90,7 @@ public class ConnectFour {
 			}
 		}
 	}
-	public void dropYellow(String[][] board, ConnectFour c) {
+	public void dropYellow(String[][] board) {
 		Scanner input = new Scanner(System.in);
 		while(true) {
 			try {
@@ -124,7 +122,7 @@ public class ConnectFour {
 			}
 		}
 	}
-	public boolean checkRed(String[][] board, ConnectFour c) {
+	public boolean checkRed(String[][] board) {
 		ArrayList<Integer> column = new ArrayList<Integer>();
 		ArrayList<Integer> row = new ArrayList<Integer>();
 		for(int i = board.length-1; i >= 0; i--) {
@@ -164,7 +162,7 @@ public class ConnectFour {
 		}
 		return false;
 	}
-	public boolean checkYellow(String[][] board, ConnectFour c) {
+	public boolean checkYellow(String[][] board) {
 		ArrayList<Integer> column = new ArrayList<Integer>();
 		ArrayList<Integer> row = new ArrayList<Integer>();
 		for(int i = board.length-1; i >= 0; i--) {
@@ -236,22 +234,7 @@ public class ConnectFour {
 		}
 		return false;
 	}
-	public boolean checkUp(String[][] board, ArrayList<Integer> column, ArrayList<Integer> row) {
-		for(int i= 0; i < row.size(); i++) {
-			for(int j = 0; j< column.size();j++) {
-				if(row.get(i)>= 3) {
-					if(board[row.get(i)-1][column.get(j)] == null || board[row.get(i)-2][column.get(j)] == null || board[row.get(i)-3][column.get(j)] == null) {
-						continue;
-					}
-					if(board[row.get(i)-1][column.get(j)].equals(board[row.get(i)][column.get(j)]) && board[row.get(i)-2][column.get(j)].equals(board[row.get(i)][column.get(j)]) &&
-							board[row.get(i)-3][column.get(j)].equals(board[row.get(i)][column.get(j)])){
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
+
 	public boolean checkDown(String[][] board, ArrayList<Integer> column, ArrayList<Integer> row) {
 		for(int i= 0; i < row.size(); i++) {
 			for(int j = 0; j< column.size();j++) {
@@ -268,6 +251,7 @@ public class ConnectFour {
 		}
 		return false;
 	}
+
 	public boolean checkLeftDownDiag(String[][] board, ArrayList<Integer> column, ArrayList<Integer> row) {
 		for(int i= 0; i < row.size(); i++) {
 			for(int j = 0; j< column.size();j++) {
@@ -284,6 +268,7 @@ public class ConnectFour {
 		}
 		return false;
 	}
+
 	public boolean checkRightDownDiag(String[][] board, ArrayList<Integer> column, ArrayList<Integer> row) {
 		for(int i= 0; i < row.size(); i++) {
 			for(int j = 0; j< column.size();j++) {
@@ -300,6 +285,7 @@ public class ConnectFour {
 		}
 		return false;
 	}
+
 	public boolean checkLeftUpDiag(String[][] board, ArrayList<Integer> column, ArrayList<Integer> row) {
 		for(int i= 0; i < row.size(); i++) {
 			for(int j = 0; j< column.size();j++) {
@@ -316,6 +302,7 @@ public class ConnectFour {
 		}
 		return false;
 	}
+
 	public boolean checkRightUpDiag(String[][] board, ArrayList<Integer> column, ArrayList<Integer> row) {
 		for(int i= 0; i < row.size(); i++) {
 			for(int j = 0; j< column.size();j++) {
@@ -332,7 +319,8 @@ public class ConnectFour {
 		}
 		return false;
 	}
-	public boolean checkTie(String[][] board, ConnectFour c) {
+
+	public boolean checkTie(String[][] board) {
 		int counter = 0;
 		for(int i = 0; i < board.length; i++) {
 			for(int j = 0; j < board[i].length; j++) {
@@ -342,7 +330,7 @@ public class ConnectFour {
 			}
 		}
 		if(counter == 0) {
-			if(checkRed(board,c) == false && checkYellow(board,c) == false) {
+			if(checkRed(board) == false && checkYellow(board) == false) {
 				return true;
 			}
 			else {
