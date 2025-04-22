@@ -2,6 +2,9 @@
 import java.util.*;
 
 public class ConnectFour {
+	final String R_TEXT = "\033[91mR\033[0m";
+	final String Y_TEXT = "\033[93mY\033[0m";
+
 	public static void main(String [] args) {
 		String[][] board = new String[6][7];
 		ConnectFour c = new ConnectFour();
@@ -39,18 +42,18 @@ public class ConnectFour {
 	}
 
 	public void printBoard(String[][] board) {
-		for(int i=0;i<6;i++){
-            for(int j=0;j<7;j++){
+		for(int i=0;i<6;i++) {
+            for(int j=0;j<7;j++) {
             	if(j == 6 & board[i][j] == null) {
             		System.out.print("|   |");
             	}
             	else if(j == 6) {
             		System.out.print("| " + board[i][j] + " |");
             	}
-            	else if(board[i][j] == null){
+            	else if(board[i][j] == null) {
             		System.out.print("|   ");
             	}	
-            	else{
+            	else {
             		System.out.print("| " + board[i][j] + " ");
             	}
             }
@@ -65,12 +68,12 @@ public class ConnectFour {
 				System.out.println("Drop a red disk at column (0 - 6): ");
 				int rlocation = input.nextInt();
 				int count = 5;
-				while(count >= 0){
+				while(count >= 0) {
 					if(board[count][rlocation] != null) {
 						count--;
 					}
-					else if(board[count][rlocation] == null){
-						board[count][rlocation] = "R";
+					else if(board[count][rlocation] == null) {
+						board[count][rlocation] = R_TEXT;
 						break;
 					}
 				}
@@ -90,6 +93,7 @@ public class ConnectFour {
 			}
 		}
 	}
+
 	public void dropYellow(String[][] board) {
 		Scanner input = new Scanner(System.in);
 		while(true) {
@@ -102,7 +106,7 @@ public class ConnectFour {
 						count--;
 					}
 					else if(board[count][ylocation] == null){
-						board[count][ylocation] = "Y";
+						board[count][ylocation] = Y_TEXT;
 						break;
 					}
 				}
@@ -123,84 +127,36 @@ public class ConnectFour {
 		}
 	}
 	public boolean checkRed(String[][] board) {
-		ArrayList<Integer> column = new ArrayList<Integer>();
-		ArrayList<Integer> row = new ArrayList<Integer>();
+		ArrayList<Integer> column = new ArrayList<>();
+		ArrayList<Integer> row = new ArrayList<>();
 		for(int i = board.length-1; i >= 0; i--) {
 			for(int j = 0; j < board[i].length; j++) {
-				if(board[i][j] == null) {
-					continue;
-				}else if(board[i][j].equals("R")) {
+				if(board[i][j] != null && board[i][j].equals(R_TEXT)) {
 					column.add(j);
 					row.add(i);
 				}
 			}
 		}
-		boolean won = false;
-		while(!won) {
-			if(checkRight(board,column,row)) {
-				return true;
-			}
-			if(checkLeft(board,column,row)) {
-				return true;
-			}
-			if(checkDown(board,column,row)) {
-				return true;
-			}
-			if(checkLeftDownDiag(board,column,row)) {
-				return true;
-			}
-			if(checkRightDownDiag(board,column,row)) {
-				return true;
-			}
-			if(checkLeftUpDiag(board,column,row)) {
-				return true;
-			}
-			if(checkRightUpDiag(board,column,row)) {
-				return true;
-			}
-			won = true;
-		}
-		return false;
+
+		return isWinner(board, column, row);
 	}
+
+	public boolean isWinner(String[][] board, ArrayList<Integer> column, ArrayList<Integer> row) {
+		return checkRight(board,column,row) || checkLeft(board,column,row) || checkDown(board,column,row) || checkLeftDownDiag(board,column,row) || checkRightDownDiag(board,column,row) || checkLeftUpDiag(board,column,row) || checkRightUpDiag(board,column,row);
+	}
+
 	public boolean checkYellow(String[][] board) {
-		ArrayList<Integer> column = new ArrayList<Integer>();
-		ArrayList<Integer> row = new ArrayList<Integer>();
+		ArrayList<Integer> column = new ArrayList<>();
+		ArrayList<Integer> row = new ArrayList<>();
 		for(int i = board.length-1; i >= 0; i--) {
 			for(int j = 0; j < board[i].length; j++) {
-				if(board[i][j] == null) {
-					continue;
-				}else if(board[i][j].equals("Y")) {
+				if(board[i][j] != null && board[i][j].equals(Y_TEXT)) {
 					column.add(j);
 					row.add(i);
 				}
 			}
 		}
-		boolean won = false;
-		while(!won) {
-			if(checkRight(board,column,row)) {
-				return true;
-			}
-			if(checkLeft(board,column,row)) {
-				return true;
-			}
-			if(checkDown(board,column,row)) {
-				return true;
-			}
-			if(checkLeftDownDiag(board,column,row)) {
-				return true;
-			}
-			if(checkRightDownDiag(board,column,row)) {
-				return true;
-			}
-			if(checkLeftUpDiag(board,column,row)) {
-				return true;
-			}
-			if(checkRightUpDiag(board,column,row)) {
-				return true;
-			}
-			won = true;
-		}
-		return false;
+		return isWinner(board, column, row);
 	}
 	public boolean checkRight(String[][] board, ArrayList<Integer> column, ArrayList<Integer> row) {
 		for(int i= 0; i < row.size(); i++) {
@@ -210,7 +166,7 @@ public class ConnectFour {
 						continue;
 					}
 					if(board[row.get(i)][column.get(j)+1].equals(board[row.get(i)][column.get(j)]) && board[row.get(i)][column.get(j)+2].equals(board[row.get(i)][column.get(j)]) &&
-							board[row.get(i)][column.get(j)+3].equals(board[row.get(i)][column.get(j)])){
+							board[row.get(i)][column.get(j)+3].equals(board[row.get(i)][column.get(j)])) {
 						return true;
 					}
 				}
@@ -226,7 +182,7 @@ public class ConnectFour {
 						continue;
 					}
 					if(board[row.get(i)][column.get(j)-1].equals(board[row.get(i)][column.get(j)]) && board[row.get(i)][column.get(j)-2].equals(board[row.get(i)][column.get(j)]) &&
-							board[row.get(i)][column.get(j)-3].equals(board[row.get(i)][column.get(j)])){
+							board[row.get(i)][column.get(j)-3].equals(board[row.get(i)][column.get(j)])) {
 						return true;
 					}
 				}
@@ -243,7 +199,7 @@ public class ConnectFour {
 						continue;
 					}
 					if(board[row.get(i)+1][column.get(j)].equals(board[row.get(i)][column.get(j)]) && board[row.get(i)+2][column.get(j)].equals(board[row.get(i)][column.get(j)]) &&
-							board[row.get(i)+3][column.get(j)].equals(board[row.get(i)][column.get(j)])){
+							board[row.get(i)+3][column.get(j)].equals(board[row.get(i)][column.get(j)])) {
 						return true;
 					}
 				}
@@ -260,7 +216,7 @@ public class ConnectFour {
 						continue;
 					}
 					if(board[row.get(i)+1][column.get(j)-1].equals(board[row.get(i)][column.get(j)]) && board[row.get(i)+2][column.get(j)-2].equals(board[row.get(i)][column.get(j)]) &&
-							board[row.get(i)+3][column.get(j)-3].equals(board[row.get(i)][column.get(j)])){
+							board[row.get(i)+3][column.get(j)-3].equals(board[row.get(i)][column.get(j)])) {
 						return true;
 					}
 				}
@@ -277,7 +233,7 @@ public class ConnectFour {
 						continue;
 					}
 					if(board[row.get(i)+1][column.get(j)+1].equals(board[row.get(i)][column.get(j)]) && board[row.get(i)+2][column.get(j)+2].equals(board[row.get(i)][column.get(j)]) &&
-							board[row.get(i)+3][column.get(j)+3].equals(board[row.get(i)][column.get(j)])){
+							board[row.get(i)+3][column.get(j)+3].equals(board[row.get(i)][column.get(j)])) {
 						return true;
 					}
 				}
@@ -294,7 +250,7 @@ public class ConnectFour {
 						continue;
 					}
 					if(board[row.get(i)-1][column.get(j)-1].equals(board[row.get(i)][column.get(j)]) && board[row.get(i)-2][column.get(j)-2].equals(board[row.get(i)][column.get(j)]) &&
-							board[row.get(i)-3][column.get(j)-3].equals(board[row.get(i)][column.get(j)])){
+							board[row.get(i)-3][column.get(j)-3].equals(board[row.get(i)][column.get(j)])) {
 						return true;
 					}
 				}
@@ -311,7 +267,7 @@ public class ConnectFour {
 						continue;
 					}
 					if(board[row.get(i)-1][column.get(j)+1].equals(board[row.get(i)][column.get(j)]) && board[row.get(i)-2][column.get(j)+2].equals(board[row.get(i)][column.get(j)]) &&
-							board[row.get(i)-3][column.get(j)+3].equals(board[row.get(i)][column.get(j)])){
+							board[row.get(i)-3][column.get(j)+3].equals(board[row.get(i)][column.get(j)])) {
 						return true;
 					}
 				}
@@ -321,24 +277,15 @@ public class ConnectFour {
 	}
 
 	public boolean checkTie(String[][] board) {
-		int counter = 0;
 		for(int i = 0; i < board.length; i++) {
 			for(int j = 0; j < board[i].length; j++) {
 				if(board[i][j] == null) {
-					counter++;
+					// There exists an empty space, therefore there cannot be a tie yet
+					return false;
 				}
 			}
 		}
-		if(counter == 0) {
-			if(checkRed(board) == false && checkYellow(board) == false) {
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
-		else {
-			return false;
-		}
+
+        return !checkRed(board) && !checkYellow(board);
 	}
 }
